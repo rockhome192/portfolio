@@ -109,6 +109,7 @@ export function ContactForm() {
           <input
             id="name"
             type="text"
+            maxLength={80}
             className={`${fieldBase} ${errors.name ? "border-[#e06c5b]" : "border-border"}`}
             placeholder="Your name"
             value={values.name}
@@ -123,6 +124,7 @@ export function ContactForm() {
           <input
             id="email"
             type="email"
+            maxLength={160}
             className={`${fieldBase} ${errors.email ? "border-[#e06c5b]" : "border-border"}`}
             placeholder="you@example.com"
             value={values.email}
@@ -139,6 +141,7 @@ export function ContactForm() {
           <textarea
             id="message"
             rows={5}
+            maxLength={3000}
             className={`${fieldBase} resize-y ${errors.message ? "border-[#e06c5b]" : "border-border"}`}
             placeholder="What would you like to build?"
             value={values.message}

@@ -21,6 +21,9 @@ function getRatelimit(): Ratelimit | null {
     // 3 messages per 10 minutes per IP.
     limiter: Ratelimit.slidingWindow(3, "10 m"),
     prefix: "portfolio:contact",
+    // In-memory cache so an already-blocked IP is rejected without another Redis
+    // round-trip while this instance stays warm.
+    ephemeralCache: new Map(),
   });
   return cached;
 }
@@ -30,7 +33,16 @@ export type RateLimitResult = { success: boolean; retryAfter: number };
 export async function checkRateLimit(ip: string): Promise<RateLimitResult | null> {
   const rl = getRatelimit();
   if (!rl) return null; // not configured → allow
-  const { success, reset } = await rl.limit(ip);
-  const retryAfter = Math.max(0, Math.ceil((reset - Date.now()) / 1000));
-  return { success, retryAfter };
+
+  try {
+    const { success, reset } = await rl.limit(ip);
+    const retryAfter = Math.max(0, Math.ceil((reset - Date.now()) / 1000));
+    return { success, retryAfter };
+  } catch (err) {
+    // Redis unreachable → fail OPEN. A rate-limit outage must never block a real
+    // person from reaching you; missing the limit is the lesser evil vs. losing
+    // the message.
+    console.error("Rate limit check failed — allowing request:", err);
+    return null;
+  }
 }
