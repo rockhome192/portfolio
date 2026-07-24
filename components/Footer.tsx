@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
 import { CopyEmail } from "./CopyEmail";
+import { ContactForm } from "./ContactForm";
 import { contact } from "@/lib/projects";
 
 export function Footer() {
@@ -36,6 +37,12 @@ export function Footer() {
               {contact.location}
             </span>
           </div>
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.08}>
+        <div className="relative mt-11 max-w-[560px]">
+          <ContactForm />
         </div>
       </Reveal>
 
