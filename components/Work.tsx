@@ -82,7 +82,7 @@ export function Work() {
       <Reveal>
         <div className="mb-9 flex flex-wrap items-baseline justify-between gap-4 border-b border-border-soft pb-4.5">
           <h2 className="m-0 font-mono text-sm font-normal text-accent">// 01 · selected work</h2>
-          <div className="font-mono text-[12.5px] text-faint">3 projects</div>
+          <div className="font-mono text-[12.5px] text-faint">{projects.length + 1} projects</div>
         </div>
       </Reveal>
 

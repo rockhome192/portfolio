@@ -34,8 +34,20 @@ export const featured = {
 
 export const projects: Project[] = [
   {
-    slug: "surveillance",
+    slug: "donatr",
     index: "02",
+    title: "DONATR — Streamer Donations",
+    badge: "demo · no real money",
+    badgeColor: "be",
+    tagline:
+      "A donation platform with a real-time alert overlay for OBS. I wrote the WebSocket service myself (Node + ws on Railway) rather than using a hosted one: the OBS browser source loads with a long-lived token, trades it for a 60-second single-use ticket, and reconnects on its own with jittered backoff. Payments run on Omise test mode — a real signed webhook settles the donation through a guarded update that can only ever fire one alert, with a reconciler for events that never arrive. Azure Speech reads the donor's message aloud over the alert, synthesised once and cached so a replay costs nothing.",
+    stack: ["Next.js 16", "TypeScript", "WebSocket (ws)", "Prisma", "PostgreSQL", "Omise"],
+    highlights: [],
+    links: [{ label: "Live demo", href: "https://donate-platform-web.vercel.app" }],
+  },
+  {
+    slug: "surveillance",
+    index: "03",
     title: "Suicide Risk Surveillance",
     badge: "team project",
     badgeColor: "data",
@@ -47,7 +59,7 @@ export const projects: Project[] = [
   },
   {
     slug: "trinity",
-    index: "03",
+    index: "04",
     title: "Trinity Securities",
     badge: "internship · 4 mo",
     badgeColor: "be",
@@ -61,8 +73,8 @@ export const projects: Project[] = [
 
 export const skills: { group: string; color: "fe" | "be" | "data" | "tool"; items: string[] }[] = [
   { group: "frontend", color: "fe", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "dnd-kit"] },
-  { group: "backend", color: "be", items: ["Node.js", "Python", "Prisma", "NextAuth", "REST APIs"] },
-  { group: "data", color: "data", items: ["PostgreSQL", "Redis", "Real-time pipelines"] },
+  { group: "backend", color: "be", items: ["Node.js", "Python", "Prisma", "NextAuth", "REST APIs", "WebSocket (ws)"] },
+  { group: "data", color: "data", items: ["PostgreSQL", "Redis", "Real-time pipelines", "Cloudflare R2"] },
   { group: "tooling", color: "tool", items: ["Docker", "Git", "Vitest", "GitHub Actions", "Railway", "Vercel"] },
 ];
 
