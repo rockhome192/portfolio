@@ -16,6 +16,11 @@ export const featured = {
   browserUrl: "donate-platform-web.vercel.app",
   meta: "deployed · real-time · solo build",
   image: "/donatr.png",
+  // Lives with the image, not in the component. It used to be hardcoded there,
+  // so swapping the featured project left a DONATR screenshot that every screen
+  // reader and crawler was told is a Kanban board.
+  imageAlt:
+    "DONATR donation page on its live domain — a donation alert card firing over the streamer's profile, with the PENDING to PAID to ALERTED pipeline below it.",
   imageAspect: "1500 / 860",
   tagline:
     "A streamer donation platform with a real-time alert overlay for OBS. I wrote the WebSocket service myself rather than using a hosted one, and the parts worth reading are the ones nobody sees: what happens when a payment webhook arrives twice, when the overlay is offline at the moment the money lands, and when somebody hands the site a bank slip that is genuine but not theirs.",

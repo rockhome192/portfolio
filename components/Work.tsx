@@ -114,7 +114,7 @@ export function Work() {
             <div className="relative bg-bg2" style={{ aspectRatio: featured.imageAspect }}>
               <Image
                 src={featured.image}
-                alt="Taskboard Kanban app — To Do, Backlog, In Progress and Done columns with colored cards, checklists, due dates and labels."
+                alt={featured.imageAlt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 1072px"
                 className="object-cover object-top"
