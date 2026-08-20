@@ -11,41 +11,41 @@ export type Project = {
 };
 
 export const featured = {
-  slug: "taskboard",
-  title: "Taskboard",
-  browserUrl: "taskboard-production-e350.up.railway.app",
-  meta: "deployed · containerized · solo build",
-  image: "/taskboard.png",
-  imageAspect: "1330 / 480",
+  slug: "donatr",
+  title: "DONATR",
+  browserUrl: "donate-platform-web.vercel.app",
+  meta: "deployed · real-time · solo build",
+  image: "/donatr.png",
+  imageAspect: "1500 / 860",
   tagline:
-    "A deployed, containerized Kanban board — drag-to-reorder columns and cards, checklists, labels, due dates and comments, persisted to PostgreSQL through a typed Prisma layer and shipped as a reproducible Docker image.",
-  stack: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "Docker"],
+    "A streamer donation platform with a real-time alert overlay for OBS. I wrote the WebSocket service myself rather than using a hosted one, and the parts worth reading are the ones nobody sees: what happens when a payment webhook arrives twice, when the overlay is offline at the moment the money lands, and when somebody hands the site a bank slip that is genuine but not theirs.",
+  stack: ["Next.js 16", "TypeScript", "WebSocket (ws)", "Prisma", "PostgreSQL", "Omise"],
   highlights: [
-    "Cut board load from multiple round-trips to a single JOIN query by folding a redundant per-request access check into the main query.",
-    "Hardened Cloudflare R2 uploads via presigned URLs — server-side size limits, filename sanitization, MIME allow-list, and orphan cleanup on delete.",
-    "Atomic sign-up: a Prisma $transaction commits the user and its one-time code together or rolls both back. Credentials + OTP + Google OAuth via NextAuth.",
-    "Shipped in a multi-stage Docker build to Railway — debugged a Prisma musl/OpenSSL engine failure and a production login redirect loop. Guarded by 28 Vitest tests + GitHub Actions CI.",
+    "Payments settle through one guarded UPDATE, so a duplicate webhook, a retry and the reconciler can all race and still fire exactly one alert. The route answers 200 before processing — which gives up the provider's retries, so it runs its own.",
+    "The OBS overlay opens with a long-lived token, trades it for a single-use 60-second ticket, and reconnects on its own. Alerts it missed while disconnected are replayed from a partial index rather than held in browser memory, because OBS restarts lose all of that.",
+    "Donations can also be paid by real bank transfer and proved with a slip, verified against the bank through SlipOK in six layers. Matching four digits of a PromptPay number turned out not to be enough — a phone shop will sell you a number ending in whatever you ask for — so the receiver's name is checked too.",
+    "Azure Speech reads the donor's message aloud over the alert, synthesised once after the race is won so a duplicate delivery is never billed twice, and cached so a replay costs nothing. 470 tests in GitHub Actions.",
   ],
   links: [
-    { label: "Live demo", href: "https://taskboard-production-e350.up.railway.app/login" },
-    { label: "Source", href: "https://github.com/rockhome192/taskboard" },
+    { label: "Live demo", href: "https://donate-platform-web.vercel.app" },
+    { label: "Source", href: "https://github.com/rockhome192/donate-platform" },
   ],
 };
 
 export const projects: Project[] = [
   {
-    slug: "donatr",
+    slug: "taskboard",
     index: "02",
-    title: "DONATR — Streamer Donations",
-    badge: "demo · no real money",
-    badgeColor: "be",
+    title: "Taskboard",
+    badge: "deployed · dockerized",
+    badgeColor: "tool",
     tagline:
-      "A donation platform with a real-time alert overlay for OBS. I wrote the WebSocket service myself (Node + ws on Railway) rather than using a hosted one: the OBS browser source loads with a long-lived token, trades it for a 60-second single-use ticket, and reconnects on its own with jittered backoff. Payments run on Omise test mode — a real signed webhook settles the donation through a guarded update that can only ever fire one alert, with a reconciler for events that never arrive. Azure Speech reads the donor's message aloud over the alert, synthesised once and cached so a replay costs nothing.",
-    stack: ["Next.js 16", "TypeScript", "WebSocket (ws)", "Prisma", "PostgreSQL", "Omise"],
+      "A Kanban board with drag-to-reorder columns and cards, checklists, labels, due dates and comments. A board used to load in several round-trips until I folded a redundant per-request access check into the main query and it became a single JOIN. Sign-up is atomic — a Prisma $transaction commits the user and its one-time code together or neither — and file uploads go straight to Cloudflare R2 through presigned URLs with size, filename and MIME checks enforced on the server.",
+    stack: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "Docker"],
     highlights: [],
     links: [
-      { label: "Live demo", href: "https://donate-platform-web.vercel.app" },
-      { label: "Source", href: "https://github.com/rockhome192/donate-platform" },
+      { label: "Live demo", href: "https://taskboard-production-e350.up.railway.app/login" },
+      { label: "Source", href: "https://github.com/rockhome192/taskboard" },
     ],
   },
   {
