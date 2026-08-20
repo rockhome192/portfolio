@@ -43,7 +43,10 @@ export const projects: Project[] = [
       "A donation platform with a real-time alert overlay for OBS. I wrote the WebSocket service myself (Node + ws on Railway) rather than using a hosted one: the OBS browser source loads with a long-lived token, trades it for a 60-second single-use ticket, and reconnects on its own with jittered backoff. Payments run on Omise test mode — a real signed webhook settles the donation through a guarded update that can only ever fire one alert, with a reconciler for events that never arrive. Azure Speech reads the donor's message aloud over the alert, synthesised once and cached so a replay costs nothing.",
     stack: ["Next.js 16", "TypeScript", "WebSocket (ws)", "Prisma", "PostgreSQL", "Omise"],
     highlights: [],
-    links: [{ label: "Live demo", href: "https://donate-platform-web.vercel.app" }],
+    links: [
+      { label: "Live demo", href: "https://donate-platform-web.vercel.app" },
+      { label: "Source", href: "https://github.com/rockhome192/donate-platform" },
+    ],
   },
   {
     slug: "surveillance",
