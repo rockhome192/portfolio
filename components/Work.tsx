@@ -34,12 +34,74 @@ function ArrowLink({ href, label, primary }: { href: string; label: string; prim
   );
 }
 
+/**
+ * The green pill on a card that has something running behind it.
+ *
+ * Same claim the featured browser frame makes with its dot, said in the one
+ * place a reader skimming the grid will actually look. Derived from the links
+ * rather than a flag of its own, so a card can never advertise a live demo it
+ * does not link to.
+ */
+function LivePill() {
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[11px] text-ok"
+      style={{
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderColor: "color-mix(in srgb, var(--ok) 40%, var(--border))",
+        background: "color-mix(in srgb, var(--ok) 10%, transparent)",
+      }}
+    >
+      <span
+        className="h-[6px] w-[6px] rounded-full bg-ok"
+        style={{ animation: "pulse 2.4s ease-out infinite" }}
+      />
+      LIVE
+    </span>
+  );
+}
+
+function CardImage({ p }: { p: Project }) {
+  return (
+    <div
+      className="relative mb-5 overflow-hidden rounded-xl border border-border-soft bg-bg2"
+      style={{ aspectRatio: "16 / 9" }}
+    >
+      {p.image ? (
+        <Image
+          src={p.image}
+          alt={p.imageAlt ?? ""}
+          fill
+          sizes="(max-width: 768px) 100vw, 540px"
+          className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.035]"
+        />
+      ) : (
+        /*
+          Deliberately empty rather than filled with something invented. Work
+          done inside a company has no screenshot to show, and saying so is a
+          fact about the work; a stock photo in this frame would be a lie about
+          it.
+        */
+        <div className="flex h-full items-center justify-center px-6 text-center">
+          <span className="font-mono text-[12.5px] leading-[1.6] text-faint">{p.imageNote}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SecondaryCard({ p, delay }: { p: Project; delay: number }) {
+  const live = p.links.find((l) => l.label === "Live demo");
   return (
     <Reveal delay={delay}>
-      <article className="flex h-full flex-col rounded-2xl border border-border bg-surface p-6">
+      <article className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-6 transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-accent">
+        {(p.image || p.imageNote) && <CardImage p={p} />}
         <div className="flex items-center justify-between gap-3">
           <span className="font-mono text-[13px] text-faint">{p.index}</span>
+          {live ? <LivePill /> : null}
+        </div>
+        <div className="mt-3 flex items-center gap-3">
           {p.badge && (
             <span
               className="rounded-full border px-2.5 py-1 font-mono text-[11.5px]"
@@ -53,7 +115,7 @@ function SecondaryCard({ p, delay }: { p: Project; delay: number }) {
             </span>
           )}
         </div>
-        <h3 className="mt-4 text-[22px] font-semibold tracking-tight">{p.title}</h3>
+        <h3 className="mt-3 text-[22px] font-semibold tracking-tight">{p.title}</h3>
         <p className="mt-3 flex-1 text-[15px] leading-[1.62] text-muted">{p.tagline}</p>
         <div className="mt-5 flex flex-wrap gap-2 font-mono text-[12.5px]">
           {p.stack.map((s) => (

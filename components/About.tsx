@@ -13,7 +13,7 @@ export function About() {
     <section id="about" className="mx-auto max-w-[1120px] px-6 py-[clamp(40px,6vw,72px)]">
       <Reveal>
         <h2 className="mb-9 m-0 border-b border-border-soft pb-4.5 font-mono text-sm font-normal text-accent">
-          // 02 · about
+          // 03 · about
         </h2>
       </Reveal>
 

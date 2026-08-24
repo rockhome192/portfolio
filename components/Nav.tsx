@@ -5,8 +5,9 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const links = [
   { id: "work", n: "01" },
-  { id: "about", n: "02" },
-  { id: "contact", n: "03" },
+  { id: "experience", n: "02" },
+  { id: "about", n: "03" },
+  { id: "contact", n: "04" },
 ];
 
 export function Nav() {

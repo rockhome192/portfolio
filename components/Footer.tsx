@@ -11,7 +11,7 @@ export function Footer() {
     >
       <Reveal>
         <h2 className="mb-10 m-0 border-b border-border-soft pb-4.5 font-mono text-sm font-normal text-accent">
-          // 03 · contact
+          // 04 · contact
         </h2>
       </Reveal>
 

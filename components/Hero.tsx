@@ -5,7 +5,23 @@ import { contact } from "@/lib/projects";
 
 export function Hero() {
   return (
-    <section id="top" className="mx-auto max-w-[1120px] px-6 pb-[clamp(48px,8vw,88px)] pt-[clamp(56px,11vw,124px)]">
+    <section
+      id="top"
+      className="relative isolate mx-auto max-w-[1120px] px-6 pb-[clamp(48px,8vw,88px)] pt-[clamp(56px,11vw,124px)]"
+    >
+      {/*
+        One soft light behind the name, and nothing else — the whole reason the
+        page reads flat is that every surface sits on the same background.
+        `isolate` keeps the -z-10 inside this section instead of dropping it
+        behind the page; `--glow` is already themed, so it dims itself in light
+        mode rather than turning into a blue smear.
+      */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-16 left-1/2 -z-10 h-[380px] w-[min(820px,92vw)] -translate-x-1/2 rounded-full"
+        style={{ background: "var(--glow)", filter: "blur(90px)" }}
+      />
+
       <Reveal>
         <div className="inline-flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1 rounded-2xl border border-border bg-surface px-3.5 py-1.5 font-mono text-[12.5px] text-muted sm:rounded-full sm:text-[13px]">
           <span
