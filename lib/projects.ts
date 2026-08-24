@@ -31,7 +31,7 @@ export const featured = {
   slug: "donatr",
   title: "DONATR",
   browserUrl: "donate-platform-web.vercel.app",
-  meta: "deployed · real-time · 520 tests",
+  meta: "deployed · real-time · 524 tests",
   image: "/donatr.png",
   // Lives with the image, not in the component. It used to be hardcoded there,
   // so swapping the featured project left a DONATR screenshot that every screen
