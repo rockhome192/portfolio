@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { DemoVideo } from "./DemoVideo";
 import { Reveal } from "./Reveal";
 import { featured, projects, type Project } from "@/lib/projects";
 
@@ -174,13 +175,11 @@ export function Work() {
               </span>
             </div>
             <div className="relative bg-bg2" style={{ aspectRatio: featured.imageAspect }}>
-              <Image
-                src={featured.image}
+              <DemoVideo
+                src={featured.video}
+                poster={featured.image}
                 alt={featured.imageAlt}
-                fill
                 sizes="(max-width: 1024px) 100vw, 1072px"
-                className="object-cover object-top"
-                priority
               />
             </div>
           </div>

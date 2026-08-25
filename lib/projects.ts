@@ -33,11 +33,18 @@ export const featured = {
   browserUrl: "donate-platform-web.vercel.app",
   meta: "deployed · real-time · 524 tests",
   image: "/donatr.png",
+  /*
+    The clip is the card; the still is what a visitor sees when the browser will
+    not play it, or when they have asked for less motion. It is a frame of the
+    same clip rather than a separate screenshot, so the two can never drift into
+    showing different versions of the product.
+  */
+  video: "/donatr-demo.mp4",
   // Lives with the image, not in the component. It used to be hardcoded there,
   // so swapping the featured project left a DONATR screenshot that every screen
   // reader and crawler was told is a Kanban board.
   imageAlt:
-    "DONATR donation page on its live domain — a donation alert card firing over the streamer's profile, with the PENDING to PAID to ALERTED pipeline below it.",
+    "The DONATR donation page on its live domain, a donation alert firing over the streamer's profile after a bank transfer was checked against the slip.",
   imageAspect: "1500 / 860",
   tagline:
     "A donation page for Thai streamers. A viewer scans a PromptPay QR, and about a second later it is on the streamer's live screen — name, message, and the message read aloud in Thai. I built all of it, including the realtime service behind the overlay.",
