@@ -1,0 +1,310 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Pixel Portfolio — the overworld.
+
+   Tokens live in app/pixel-tokens.css. The canvas export carried every rule as
+   an inline style attribute, which is how one page ends up with
+   'Press Start 2P' written out forty times in nine different sizes.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.pm-root {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  color: var(--pm-ink);
+
+  /* VT323 ships a single weight. Without this, <b> and <strong> get a synthetic
+     bold drawn by smearing the glyph sideways, which destroys the pixel grid. */
+  font-synthesis: none;
+}
+
+/* ── board ─────────────────────────────────────────────────────────────── */
+
+/*
+  Below 768px the board is not shown at all.
+
+  At phone width a tile is under 15px and a sprite pixel is under 2px, so the
+  character is a smudge — and there is no keyboard to move it with. It would be
+  220px of vertical space spent on something nobody can use, in front of the
+  content they came for. The row of section links below stays, and on a phone it
+  simply is the navigation.
+*/
+.pm-board-wrap {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .pm-board-wrap {
+    display: flex;
+  }
+}
+
+.pm-board {
+  position: relative;
+  width: 100%;
+  /* It stops growing before the fold, so centre what is left. */
+  margin-inline: auto;
+  overflow: hidden;
+  background: #0f3f18;
+  /*
+    Literals, not theme tokens.
+
+    The board is a screen sitting on the page and keeps its night colours in
+    daylight — but three properties here were reading --pm-edge, --pm-shadow and
+    --pm-gold, which do flip. In day mode the door ring went from 10.63:1 to
+    2.54:1 against the doorway behind it, so the five lit doors — the only thing
+    on the board anyone can act on — stopped looking like anything at all.
+  */
+  border: 4px solid #fcfcfc;
+  box-shadow: 0 6px 0 #000;
+  /* Signs size themselves against the board, not the viewport. */
+  container-type: inline-size;
+  /* Dragging across a game board should not highlight its signs. */
+  user-select: none;
+}
+
+.pm-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.pm-tile {
+  position: absolute;
+  overflow: hidden;
+}
+
+/* One sprite pixel, inside a tile or inside the player. */
+.pm-px {
+  position: absolute;
+}
+
+.pm-sign {
+  position: absolute;
+  z-index: 6;
+  text-align: center;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-sign-sm);
+  line-height: 1.1;
+  /* The plate below carries the contrast now. A 2px black shadow on a
+     #101028 plate is invisible to a person and, worse, it is the single
+     reason axe files these five labels as 'incomplete' instead of measuring
+     them. Removing it is what turns the fix into something a tool can see. */
+  pointer-events: none;
+}
+
+/*
+  The signboard behind the word.
+
+  Measured on the grass (#34a038) the five labels ran 2.49:1, 2.15:1, 2.38:1,
+  2.38:1 and 1.45:1 — every one of them under the 4.5:1 that 16px text owes.
+  axe could not see this at all: it returns "contrast could not be determined
+  because it uses complex text shadows" and files it as incomplete, which is
+  not a pass. A 2px offset shadow reads as an outline to a person and as
+  nothing to a machine.
+
+  A dark plate fixes both. The same five colours now sit on #101028 at 7.2:1
+  (CONTACT, the worst) to 12.4:1, it is measurable by any tool, and a wooden
+  signboard is what an overworld map would have had anyway.
+*/
+.pm-sign-plate {
+  display: inline-block;
+  padding: 4px 6px;
+  background: #101028;
+}
+
+/* A sign spans 5 tiles = 1/5 of the board. "DEV LOG" at 16px needs 112px, so
+   16px only fits once the board is at least 560px wide. Below that, 8px — the
+   only smaller size still on the 8px grid. */
+@container (min-width: 560px) {
+  .pm-sign {
+    font-size: var(--pm-sign-lg);
+  }
+}
+
+/* ── picking the game up and putting it down ───────────────────────────── */
+
+/*
+  The board is focusable, and the game only listens while it holds focus.
+  Both states need to be visible: "my arrow keys do nothing" and "my arrow keys
+  did something I did not expect" are equally confusing without a signal.
+*/
+.pm-board:focus-visible {
+  outline: 3px solid var(--pm-ice);
+  outline-offset: 3px;
+  border-radius: 0;
+}
+
+.pm-board[data-playing="true"] {
+  border-color: #f8d800;
+}
+
+.pm-play-badge {
+  position: absolute;
+  z-index: 8;
+  left: 8px;
+  bottom: 8px;
+  padding: 4px 6px;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-sign-sm);
+  line-height: 1.4;
+  color: #101028;
+  background: #fcfcfc;
+  pointer-events: none;
+}
+
+.pm-board[data-playing="true"] .pm-play-badge {
+  background: #f8d800;
+}
+
+@container (min-width: 560px) {
+  .pm-play-badge {
+    font-size: var(--pm-sign-lg);
+  }
+}
+
+.pm-door {
+  position: absolute;
+  z-index: 4;
+  display: block;
+  background: #3a2010;
+  box-shadow: inset 0 0 0 0.35cqw #f8d800;
+  cursor: pointer;
+}
+
+.pm-door-glow {
+  position: absolute;
+  inset: 0;
+  background: #f8d800;
+  opacity: 0.35;
+  animation: pm-door-glow 1.4s steps(2) infinite;
+}
+
+.pm-door-knob {
+  position: absolute;
+  left: 62%;
+  top: 42%;
+  width: 14%;
+  height: 14%;
+  background: #fcfcfc;
+}
+
+.pm-player {
+  position: absolute;
+  z-index: 5;
+  transition: left var(--pm-step, 135ms) linear, top var(--pm-step, 135ms) linear;
+}
+
+.pm-crt {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0 2px,
+    rgba(0, 0, 0, 0) 2px 4px
+  );
+}
+
+@keyframes pm-door-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ── status strip ──────────────────────────────────────────────────────── */
+
+.pm-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.5;
+}
+
+.pm-status-key {
+  color: var(--pm-faint);
+}
+
+.pm-status-val {
+  color: var(--pm-gold);
+}
+
+/* ── section links ─────────────────────────────────────────────────────── */
+
+.pm-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.pm-btn {
+  display: inline-block;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.4;
+  color: var(--pm-ink);
+  background: var(--pm-panel-2);
+  border: 3px solid var(--pm-edge);
+  box-shadow: 0 4px 0 var(--pm-shadow);
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.pm-btn:hover {
+  background: var(--pm-gold);
+  color: var(--pm-panel);
+}
+
+.pm-btn-primary {
+  background: var(--pm-gold);
+  color: var(--pm-panel);
+}
+
+.pm-btn-primary:hover {
+  background: var(--pm-edge);
+  color: var(--pm-panel);
+}
+
+.pm-btn[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/*
+  Under the buttons, not floated off to the right of them. At 1440px the old
+  `margin-left:auto` put this sentence 500px from the last button it describes.
+*/
+.pm-hint {
+  margin: 0;
+  font-family: var(--pm-body-font);
+  font-size: var(--pm-t-small);
+  line-height: 1.6;
+  color: var(--pm-faint);
+}
+
+/* Nothing to walk with on a phone, so nothing to explain. */
+@media (max-width: 767px) {
+  .pm-hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-player {
+    transition: none;
+  }
+  .pm-door-glow {
+    animation: none;
+    opacity: 0.6;
+  }
+}

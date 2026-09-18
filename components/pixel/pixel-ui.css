@@ -1,0 +1,807 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Pixel Portfolio — page furniture.
+
+   Tokens in app/pixel-tokens.css; the board in pixel.css. Everything spaces on
+   an 8px grid, which is the one place where the pixel conceit and ordinary
+   spacing hygiene want exactly the same thing.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.pm-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  padding-block: 16px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  background: var(--pm-page);
+  color: var(--pm-ink);
+  font-family: var(--pm-body-font);
+  font-synthesis: none;
+}
+
+.pm-skip {
+  position: absolute;
+  left: -9999px;
+}
+.pm-skip:focus {
+  position: static;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+/* ── header ────────────────────────────────────────────────────────────── */
+
+.pm-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+  border: 4px solid var(--pm-edge);
+  background: var(--pm-panel);
+  box-shadow: 0 6px 0 var(--pm-shadow);
+  padding: 16px;
+}
+
+.pm-nameplate {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pm-name {
+  margin: 0;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-hero);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--pm-gold);
+  /* Press Start 2P is 1em wide per character, so the full name is 22em and has
+     to be allowed to break rather than push the page sideways. */
+  overflow-wrap: anywhere;
+}
+
+.pm-role {
+  margin: 0;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.6;
+  color: var(--pm-ice);
+  overflow-wrap: anywhere;
+}
+
+.pm-switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/*
+  The three switches sit beside his name, and at --pm-t-label with a 3px
+  border they read as loud as it. Small, hairline, and transparent instead:
+  a control the page offers rather than a control it announces. 44px of
+  height is kept because that is the touch target, not the type size.
+*/
+.pm-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px;
+  font-family: var(--pm-disp);
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--pm-dim);
+  background: transparent;
+  border: 1px solid var(--pm-rule);
+  cursor: pointer;
+}
+
+.pm-switch:hover {
+  border-color: var(--pm-edge);
+  color: var(--pm-ink);
+}
+
+.pm-switch[aria-pressed="true"] {
+  color: var(--pm-gold);
+  border-color: var(--pm-gold);
+}
+
+/* ── section ───────────────────────────────────────────────────────────── */
+
+.pm-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pm-gap);
+  scroll-margin-top: 16px;
+}
+
+/*
+  No reading measure on the room column, and that is a decision, not an omission.
+
+  A cap was tried: 26 * --pm-t-body + 20px, applied to .pm-roomnav and
+  .pm-section on /experience. It was right for a single column of prose and
+  wrong for everything else — measured at 1440 with the cap on every room,
+  /about fell to 310px and 28 characters a line, /dev-log to 272px and 24,
+  /contact broke the email address mid-word, and the /work demo video halved.
+  /experience has since become two-column too, so the last page that wanted it
+  no longer does. Prose is held at 65ch on .pm-body instead, which travels with
+  the text rather than with the box.
+*/
+
+/* A programmatic hash target should not flash a ring at a mouse user, but it
+   still needs one if it ever becomes a real tab stop. */
+.pm-section:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.pm-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 4px solid var(--pm-gold);
+  padding-bottom: 16px;
+}
+
+.pm-section-title {
+  margin: 0;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-title);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--pm-gold);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.pm-section-lede {
+  margin: 0;
+  font-size: var(--pm-t-body);
+  line-height: var(--pm-lh);
+  color: var(--pm-dim);
+  max-width: 65ch;
+}
+
+/*
+  Text for a screen reader and not for the eye.
+
+  display:none and visibility:hidden would take it from both. A 1px clipped
+  box is the one shape that stays in the accessibility tree while occupying
+  no space and drawing nothing.
+*/
+.pm-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── body copy ─────────────────────────────────────────────────────────── */
+
+.pm-body {
+  margin: 0;
+  font-family: var(--pm-prose);
+  font-size: var(--pm-t-prose);
+  line-height: var(--pm-lh-prose);
+  color: var(--pm-dim);
+  /* The measure the canvas export never set: it ran text the full 880px, at
+     ninety characters a line. 65ch on VT323 is 26em. */
+  max-width: 65ch;
+}
+
+.pm-body-lead {
+  color: var(--pm-ink);
+}
+
+/*
+  Emphasis, in a typeface with exactly one weight.
+
+  Asking for bold here gets a synthetic one — the glyph drawn twice, a pixel
+  apart — which on a pixel face reads as a fault in the screen. Colour is how
+  every game this page is dressed as has always marked the important noun.
+*/
+.pm-k {
+  color: var(--pm-ice);
+}
+
+.pm-faint {
+  color: var(--pm-faint);
+}
+
+/* Tailwind's preflight sets `ol, ul, menu { list-style: none }`, so this list
+   had 1.2em of indent and no bullets to sit under it. */
+.pm-highlights {
+  margin: 0;
+  padding-left: 1.2em;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--pm-prose);
+  font-size: var(--pm-t-prose);
+  line-height: var(--pm-lh-prose);
+  color: var(--pm-dim);
+}
+
+.pm-highlights li {
+  max-width: 65ch;
+}
+
+/* ── cards ─────────────────────────────────────────────────────────────── */
+
+.pm-grid-2 {
+  display: grid;
+  /* min() so a 320px phone gets one full-width column instead of a 300px track
+     forcing the page sideways. */
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--pm-gap);
+}
+
+.pm-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--pm-panel-2);
+  border: 3px solid var(--pm-rule);
+  padding: 16px;
+}
+
+.pm-card-featured {
+  background: var(--pm-panel);
+  border: 4px solid var(--pm-edge);
+  box-shadow: 0 6px 0 var(--pm-shadow);
+  padding: 24px;
+}
+
+.pm-card-quiet {
+  border-color: var(--pm-rule);
+}
+
+.pm-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+}
+
+.pm-card-title {
+  margin: 0;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--pm-ink);
+  overflow-wrap: anywhere;
+}
+
+.pm-card-title-lg {
+  font-size: var(--pm-t-title);
+  color: var(--pm-lime);
+}
+
+.pm-tag {
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.4;
+  background: var(--pm-gold);
+  color: var(--pm-panel);
+  padding: 6px 8px;
+}
+
+.pm-meta,
+.pm-badge {
+  font-size: var(--pm-t-small);
+  line-height: 1.5;
+  color: var(--pm-gold);
+}
+
+.pm-entry-tag {
+  margin: 0;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.5;
+}
+
+/* ── screenshots ───────────────────────────────────────────────────────── */
+
+.pm-shot {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 3px solid var(--pm-rule);
+  background: var(--pm-panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pm-shot-img {
+  object-fit: cover;
+  object-position: top;
+}
+
+.pm-shot-note {
+  padding: 16px;
+  text-align: center;
+  font-size: var(--pm-t-small);
+  line-height: var(--pm-lh);
+  color: var(--pm-faint);
+  max-width: 40ch;
+}
+
+/* ── the browser frame around the demo clip ────────────────────────────── */
+
+.pm-window {
+  border: 3px solid var(--pm-rule);
+  background: var(--pm-panel-2);
+  overflow: hidden;
+}
+
+.pm-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 3px solid var(--pm-rule);
+  padding: 8px 12px;
+}
+
+.pm-window-dots {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+
+.pm-window-dots span {
+  width: 10px;
+  height: 10px;
+}
+
+.pm-window-url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  font-size: var(--pm-t-small);
+  color: var(--pm-dim);
+}
+
+.pm-window-live {
+  flex: none;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  color: var(--pm-lime);
+}
+
+.pm-window-screen {
+  position: relative;
+  background: #000;
+  max-width: 100%;
+}
+
+/* ── chips and links ───────────────────────────────────────────────────── */
+
+.pm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pm-chip {
+  border: 2px solid var(--pm-rule);
+  padding: 2px 8px;
+  font-size: var(--pm-t-small);
+  line-height: 1.5;
+  color: var(--pm-dim);
+}
+
+.pm-linkrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pm-link {
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.4;
+  color: var(--pm-ink);
+  border: 3px solid var(--pm-rule);
+  padding: 9px 11px;
+}
+
+.pm-link:hover {
+  border-color: var(--pm-gold);
+  color: var(--pm-gold);
+}
+
+.pm-link-primary {
+  border-color: var(--pm-gold);
+  color: var(--pm-gold);
+}
+
+.pm-link-primary:hover {
+  background: var(--pm-gold);
+  color: var(--pm-panel);
+}
+
+.pm-inline-link {
+  color: var(--pm-ice);
+}
+
+.pm-inline-link:hover {
+  color: var(--pm-gold);
+}
+
+/* ── timeline rail ─────────────────────────────────────────────────────── */
+
+.pm-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pm-rail-item {
+  --pm-rail-accent: var(--pm-gold);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 4px solid var(--pm-rail-accent);
+  padding-left: 16px;
+}
+
+.pm-rail-item[data-kind="study"] {
+  --pm-rail-accent: var(--pm-rose);
+}
+
+.pm-rail-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
+}
+
+.pm-rail-when {
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.5;
+}
+
+.pm-rail-kind {
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.4;
+  /* Keep the foreground and its contrasting badge fill together. */
+  color: var(--pm-panel);
+  background: var(--pm-rail-accent, var(--pm-gold));
+  padding: 4px 6px;
+}
+
+.pm-rail-title {
+  margin: 0;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--pm-ink);
+  overflow-wrap: anywhere;
+}
+
+.pm-rail-org {
+  margin: 0;
+  font-size: var(--pm-t-body);
+  line-height: 1.5;
+  color: var(--pm-ice);
+}
+
+/* ── two-column blocks ─────────────────────────────────────────────────── */
+
+.pm-two-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 32px var(--pm-gap);
+  align-items: start;
+}
+
+.pm-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pm-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pm-skill-group {
+  margin: 0 0 8px;
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* ── contact ───────────────────────────────────────────────────────────── */
+
+.pm-mailto {
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.7;
+  color: var(--pm-gold);
+  overflow-wrap: anywhere;
+}
+
+.pm-mailto:hover {
+  color: var(--pm-ink);
+}
+
+.pm-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 0;
+  font-size: var(--pm-t-body);
+  line-height: 1.6;
+}
+
+.pm-facts dt {
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  color: var(--pm-faint);
+}
+
+.pm-facts dd {
+  margin: 0;
+  color: var(--pm-dim);
+  /* "github.com/rockhome192 >" is 230px of VT323 in a 232px track at 360px.
+     Without these two lines the page is one character away from scrolling
+     sideways, and browsers will not break the string at its slashes. */
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.pm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  background: var(--pm-panel);
+  border: 4px solid var(--pm-edge);
+  box-shadow: 0 6px 0 var(--pm-shadow);
+  padding: 24px;
+}
+
+.pm-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.pm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.pm-field-label {
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.5;
+  color: var(--pm-ice);
+}
+
+.pm-input {
+  width: 100%;
+  font-family: var(--pm-body-font);
+  font-size: var(--pm-t-body);
+  line-height: 1.5;
+  color: var(--pm-ink);
+  background: var(--pm-panel-2);
+  border: 3px solid var(--pm-rule);
+  padding: 11px 12px;
+  outline: none;
+  resize: vertical;
+}
+
+.pm-input:focus {
+  border-color: var(--pm-gold);
+}
+
+.pm-input-bad {
+  border-color: var(--pm-red);
+}
+
+.pm-input[disabled] {
+  opacity: 0.6;
+}
+
+.pm-field-error,
+.pm-form-error {
+  margin: 0;
+  font-size: var(--pm-t-small);
+  line-height: 1.5;
+  color: var(--pm-red);
+}
+
+.pm-sent {
+  align-items: flex-start;
+}
+
+/* ── footer ────────────────────────────────────────────────────────────── */
+
+.pm-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  border-top: 4px solid var(--pm-rule);
+  padding-top: 24px;
+  font-size: var(--pm-t-small);
+  line-height: 1.6;
+  color: var(--pm-dim);
+}
+
+/* ── focus ─────────────────────────────────────────────────────────────── */
+
+.pm-page :where(a, button, input, textarea):focus-visible,
+.pm-root :where(a, button):focus-visible {
+  outline: 3px solid var(--pm-ice);
+  outline-offset: 2px;
+  /* globals.css rounds every focus ring by 6px. Nothing here is round. */
+  border-radius: 0;
+}
+
+/* ── shell ─────────────────────────────────────────────────────────────── */
+
+/*
+  layout.tsx paints a fixed grid-and-glow backdrop for the terminal theme that
+  the previous design used. This sits above it and takes the page's own ground,
+  so the two never show through each other at the edges.
+*/
+.pm-shell {
+  /* Was 100%, which resolves to auto — nothing above it sets a height — so a
+     short page left the old design's body colour showing underneath. */
+  min-height: 100dvh;
+  background: var(--pm-page);
+}
+
+/* globals.css paints selections in the previous design's cyan. */
+.pm-shell ::selection {
+  background: var(--pm-gold);
+  color: var(--pm-panel);
+}
+
+/* The scanline overlay only exists inside the board, and the board is not
+   rendered below 768px — so on a phone this switch would change nothing. */
+@media (max-width: 767px) {
+  .pm-switch[data-switch="pm-crt"] {
+    display: none;
+  }
+
+  /* 8px each, so a 24px hero has 350px to put "Phatcharadanai" on one line.
+     The header's own 4px border is what separates it from the screen edge. */
+  .pm-page {
+    padding-inline: 8px;
+  }
+
+  .pm-header {
+    padding: 8px;
+  }
+}
+
+.pm-main {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* ── the room nav ──────────────────────────────────────────────────────── */
+
+/*
+  One row of text, on every page except the map.
+
+  It is not a mini-map: see PixelRoomNav.tsx. It is not `.pm-nav` either — that
+  row is five chunky buttons and it is the main event on the homepage, where
+  the visitor has to be told these five places exist. Here they already know;
+  what they need is a way across that does not outweigh the room they came to
+  read.
+*/
+.pm-roomnav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  border-bottom: 4px solid var(--pm-edge);
+  padding-bottom: 16px;
+}
+
+.pm-roomnav-link {
+  font-family: var(--pm-disp);
+  font-size: var(--pm-t-label);
+  line-height: 1.4;
+  color: var(--pm-dim);
+  text-decoration: none;
+  /* A 44px-tall tap target out of a 12px label, without moving the row. */
+  padding-block: 12px;
+}
+
+.pm-roomnav-link:hover {
+  color: var(--pm-gold);
+}
+
+/*
+  Where you are, said twice: in colour and in an underline. Colour alone is a
+  WCAG 1.4.1 failure, and this row is the only navigation a room page has.
+*/
+.pm-roomnav-link[aria-current="page"] {
+  color: var(--pm-gold);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.pm-roomnav-home {
+  color: var(--pm-ice);
+  margin-inline-end: 4px;
+}
+
+/* The name plate is a link home inside a room, and must not look like body
+   copy that happens to be blue — it keeps the plate's own gold. */
+.pm-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pm-name-link:hover {
+  color: var(--pm-ice);
+}
+
+/* The homepage's three sentences, under the board. */
+.pm-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Experience: readable prose with a separate context column. */
+.pm-experience-layout { display: grid; gap: 40px; min-width: 0; }
+.pm-experience-layout > * { min-width: 0; }
+/* .pm-body already carries the prose face; these two are not .pm-body. */
+.pm-experience-contributions,
+.pm-experience-links {
+  font-family: var(--pm-prose);
+  font-size: var(--pm-t-prose);
+  line-height: var(--pm-lh-prose);
+}
+.pm-experience-contributions { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 24px; color: var(--pm-dim); }
+.pm-experience-contributions h3 { margin: 0 0 8px; font-family: var(--pm-disp); font-size: 14px; line-height: 1.8; color: var(--pm-ink); }
+.pm-experience-contributions p { margin: 0; max-width: 65ch; }
+.pm-experience-contributions details { margin-top: 8px; }
+.pm-experience-contributions summary { cursor: pointer; color: var(--pm-ice); text-decoration: underline; text-underline-offset: 4px; padding-block: 4px; }
+.pm-experience-contributions details[open] p { margin-top: 8px; }
+.pm-experience-aside { display: flex; flex-direction: column; gap: 32px; padding: 24px; border: 1px solid var(--pm-rule); background: var(--pm-panel); align-self: start; }
+.pm-experience-links { list-style: none; padding: 0; margin: 0; display: grid; gap: 20px; }
+.pm-experience-links a { color: var(--pm-ice); text-underline-offset: 4px; }
+.pm-experience-links p { margin: 4px 0 0; color: var(--pm-dim); }
+.pm-switch[aria-pressed="true"] { border-color: var(--pm-rule); color: var(--pm-ink); }
+.pm-switch-state { font-family: var(--pm-prose); font-size: 11px; color: var(--pm-dim); }
+.pm-switch[aria-pressed="true"] .pm-switch-state { color: var(--pm-lime); }
+@media (min-width: 1024px) { .pm-experience-layout { grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 48px; } }

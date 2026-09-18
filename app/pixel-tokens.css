@@ -1,0 +1,140 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Pixel Portfolio — design tokens.
+
+   Separate from globals.css so the whole pixel layer can be lifted out in one
+   line if it ever stops earning its place. globals.css still owns the terminal
+   theme the previous design used; nothing here overwrites it.
+
+   Type sizes come from measurements taken out of the font binaries:
+     · Press Start 2P has an advance of exactly 1.000em — a character is as wide
+       as the font size — and is drawn on an 8px grid, so anything that is not a
+       multiple of 8 lands stems on half pixels and goes soft. 16px is the floor.
+     · VT323 has an advance of 0.400em, which is what makes `65ch` mean 26em.
+   Six sizes, down from the fifteen the canvas export used.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Night — the default, and the only palette the board itself ever uses. */
+  --pm-page: #0b0b18;
+  --pm-panel: #101028;
+  --pm-panel-2: #16163a;
+  --pm-edge: #fcfcfc;
+  --pm-rule: #3a3a68;
+  --pm-ink: #fcfcfc;
+  --pm-dim: #b8b8d8;
+  --pm-faint: #8a8ab4;
+  --pm-gold: #f8d800;
+  --pm-ice: #8cd8ff;
+  --pm-lime: #78f878;
+  --pm-rose: #f878f8;
+  --pm-red: #d82800;
+  --pm-shadow: #000000;
+
+  --pm-disp: var(--font-press-start), "Courier New", monospace;
+  --pm-body-font: var(--font-vt323), ui-monospace, monospace;
+
+  /* Press Start 2P — multiples of 8 only. */
+  --pm-t-hero: 32px;
+  --pm-t-title: 24px;
+  --pm-t-label: 16px;
+  /* VT323. */
+  --pm-t-body: 24px;
+  --pm-t-small: 20px;
+  --pm-lh: 1.7;
+
+  /*
+    Running text, and only running text.
+
+    The pixel face stays on the name, the headings, the nav and the buttons —
+    that is where the dressing does its work. A paragraph is where it costs
+    something, so prose gets the reader's own face at a size the scale above
+    cannot give it: --pm-t-body is 24px because VT323 is drawn small, and 24px
+    of system-ui is a headline. Read mode still exists and still swaps the
+    whole system, headings included, for anyone who wants none of the pixels.
+  */
+  --pm-prose: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pm-t-prose: 17px;
+  --pm-lh-prose: 1.75;
+
+  /* Sign and badge type on the board. Separate from the scale above because
+     they are sized against the board's width, not the page's. */
+  --pm-sign-sm: 8px;
+  --pm-sign-lg: 16px;
+
+  --pm-gap: 24px;
+}
+
+/*
+  Day.
+
+  Only the seven interface tokens and the five accents change. The board keeps
+  its night colours in both themes, on purpose: it is a screen sitting on the
+  page, and a photograph does not repaint itself when the lights come on. Every
+  pair below was checked against #ffffff, #f3f1fb and #e9e7f4 — the lowest
+  ratio in the set is 4.86:1.
+*/
+:root[data-theme="light"] {
+  --pm-page: #e9e7f4;
+  --pm-panel: #ffffff;
+  --pm-panel-2: #f3f1fb;
+  --pm-edge: #101028;
+  --pm-rule: #b9b6d2;
+  --pm-ink: #101028;
+  --pm-dim: #33314f;
+  --pm-faint: #5f5c80;
+  --pm-gold: #7a6100;
+  --pm-ice: #0a5f8c;
+  --pm-lime: #1c6f2c;
+  --pm-rose: #8c1f8c;
+  --pm-red: #b01c00;
+  /* Was #b9b6d2 — the same value as --pm-rule, at 1.61:1 against the page.
+     Every hard offset shadow in the pixel UI vanished and the panels read as
+     flat boxes. This is 2.78:1: still not black, but a real edge. */
+  --pm-shadow: #8b88a8;
+}
+
+/*
+  Read mode.
+
+  A pixel typeface costs reading speed, and for some people it costs the text
+  entirely. Rather than water the design down for everyone, the whole type
+  system swaps to the reader's own system face in one click. Borders, colour and
+  layout do not move, so it is plainly the same page.
+*/
+:root[data-read="on"] {
+  --pm-disp: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pm-body-font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pm-t-hero: 30px;
+  --pm-t-title: 21px;
+  --pm-t-label: 14px;
+  --pm-t-body: 17px;
+  --pm-t-small: 15px;
+  --pm-lh: 1.8;
+  /* system-ui is far narrower than Press Start 2P, so the board's own labels
+     can afford to sit between the two pixel-grid steps here. */
+  --pm-sign-sm: 11px;
+  --pm-sign-lg: 15px;
+}
+
+:root[data-crt="off"] .pm-crt {
+  display: none;
+}
+
+/*
+  Mobile.
+
+  Press Start 2P is one em wide per glyph, so "Phatcharadanai" is 14em. At 32px
+  that is 448px of word inside a 318px header, and `overflow-wrap: anywhere`
+  did the only thing left to it: it broke the name mid-word, "Phatchara /
+  danai". Measured in a browser at 390px, not calculated.
+
+  24px puts the word at 336px, which fits once the two gutters around it come
+  down to 8px (pixel-ui.css). Still a multiple of 8, still a step above the
+  title. Read mode keeps its own 30px: system-ui is far narrower and never had
+  the problem.
+*/
+@media (max-width: 767px) {
+  :root {
+    --pm-t-hero: 24px;
+  }
+}

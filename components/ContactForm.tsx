@@ -1,62 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { contactSchema, toFieldErrors, type ContactInput } from "@/lib/contact-schema";
+import { useContactForm } from "@/lib/use-contact-form";
 
-type Status = "idle" | "submitting" | "success" | "error";
-
-const empty: ContactInput = { name: "", email: "", message: "", website: "" };
-
+// The submit handler, validation and status live in lib/use-contact-form.ts —
+// the pixel page renders the same behaviour behind completely different markup.
 const fieldBase =
   "w-full rounded-lg border bg-surface2 px-3.5 py-2.5 font-sans text-[15px] text-text " +
   "placeholder:text-faint outline-none transition-colors focus:border-accent";
 
 export function ContactForm() {
-  const [values, setValues] = useState<ContactInput>(empty);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<Status>("idle");
-  const [formError, setFormError] = useState<string>("");
-
-  function set<K extends keyof ContactInput>(key: K, v: string) {
-    setValues((s) => ({ ...s, [key]: v }));
-    if (errors[key]) setErrors((e) => ({ ...e, [key]: "" }));
-  }
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setFormError("");
-
-    // Client-side validation with the SAME schema the server uses.
-    const parsed = contactSchema.safeParse(values);
-    if (!parsed.success) {
-      setErrors(toFieldErrors(parsed.error));
-      return;
-    }
-    setErrors({});
-    setStatus("submitting");
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
-      });
-
-      if (res.ok) {
-        setStatus("success");
-        setValues(empty);
-        return;
-      }
-
-      const data = await res.json().catch(() => ({}));
-      if (res.status === 422 && data.fieldErrors) setErrors(data.fieldErrors);
-      setFormError(data.error || "Something went wrong. Please try again.");
-      setStatus("error");
-    } catch {
-      setFormError("Network error — please check your connection and try again.");
-      setStatus("error");
-    }
-  }
+  const { values, errors, status, formError, submitting, set, onSubmit, reset } =
+    useContactForm();
 
   if (status === "success") {
     return (
@@ -73,7 +27,7 @@ export function ContactForm() {
         </p>
         <button
           type="button"
-          onClick={() => setStatus("idle")}
+          onClick={reset}
           className="mt-4 text-faint underline-offset-4 transition-colors hover:text-accent hover:underline"
         >
           send another
@@ -81,8 +35,6 @@ export function ContactForm() {
       </div>
     );
   }
-
-  const submitting = status === "submitting";
 
   return (
     <form

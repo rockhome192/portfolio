@@ -24,7 +24,21 @@ export type TimelineEntry = {
   org: string;
   place?: string;
   kind: "work" | "study";
+  /**
+   * The role in one paragraph. Contributions below is what /experience
+   * renders; this covers the same ground as prose, for anywhere that wants
+   * one block instead of a list.
+   */
   detail: string;
+  /**
+   * The separable pieces of work inside one role: the line a visitor reads
+   * first, and the detail they open only if they want it.
+   *
+   * On the entry rather than in the component. Held in PixelTimeline it was
+   * rendered for every entry whose kind is work, so a second job would have
+   * inherited the first one's three projects.
+   */
+  contributions?: { title: string; summary: string; detail: string }[];
 };
 
 export const featured = {
@@ -121,6 +135,23 @@ export const timeline: TimelineEntry[] = [
     kind: "work",
     detail:
       "Built Tickmatch end to end — an internal tool that counts how many times a stock ticks upward during a trading day: a Python service ingesting market data files, a live table with Daily and 1-minute charts, Redis for the pipeline and cache, Docker for a reproducible environment. Led the frontend of a stock News Platform (Next.js + TypeScript) — watchlists, Premium membership, real-time Telegram alerts — and built the initial API structure; the AI sentiment service was owned by a senior engineer. Also delivered Reweb Trinity, a prototype redesign of the company site for a younger investor audience.",
+    contributions: [
+      {
+        title: "Tickmatch",
+        summary: "Built an internal tool to count upward stock ticks and explore daily and one-minute charts.",
+        detail: "Implemented the market-data ingestion service in Python, the live table and charts, Redis pipeline and caching, and a reproducible Docker environment.",
+      },
+      {
+        title: "Stock News Platform",
+        summary: "Led the frontend for watchlists, Premium membership and real-time Telegram alerts.",
+        detail: "Built the Next.js and TypeScript frontend and initial API structure. A senior engineer owned the AI sentiment service.",
+      },
+      {
+        title: "Website Redesign",
+        summary: "Delivered Reweb Trinity, a company-site redesign prototype for younger investors.",
+        detail: "Created a prototype of the company website with a younger investor audience in mind.",
+      },
+    ],
   },
   {
     when: "Graduated 2026",
@@ -129,7 +160,7 @@ export const timeline: TimelineEntry[] = [
     place: "GPA 3.45",
     kind: "study",
     detail:
-      "Senior project was the Chiang Rai suicide-risk surveillance dashboard above, built with a teammate who owned the Random Forest model.",
+      "Built a Chiang Rai suicide-risk surveillance dashboard for the senior project, with a teammate responsible for the Random Forest model.",
   },
 ];
 
@@ -147,3 +178,39 @@ export const contact = {
   location: "Bangkok, Thailand",
   resume: "/resume.pdf",
 };
+
+/**
+ * Every project as one list, for the pages under `/work`.
+ *
+ * `featured` is a wider shape than the others — it has a demo clip, a browser
+ * chrome URL and an aspect ratio — so this type is the union of the two rather
+ * than a lowest common denominator that would throw the clip away. Nothing new
+ * is declared here: a project page renders the same strings the card does, with
+ * room for the ones the card has no space for.
+ *
+ * The order is the order of the workshop: featured first.
+ */
+export type ProjectPage = {
+  slug: string;
+  index: string;
+  title: string;
+  tagline: string;
+  stack: string[];
+  highlights: string[];
+  links: { label: string; href: string }[];
+  badge?: string;
+  badgeColor?: "fe" | "be" | "data" | "tool";
+  image?: string;
+  imageAlt?: string;
+  imageNote?: string;
+  imageAspect?: string;
+  video?: string;
+  browserUrl?: string;
+  meta?: string;
+};
+
+export const allProjects: ProjectPage[] = [{ ...featured, index: "01" }, ...projects];
+
+export function getProject(slug: string): ProjectPage | undefined {
+  return allProjects.find((p) => p.slug === slug);
+}
