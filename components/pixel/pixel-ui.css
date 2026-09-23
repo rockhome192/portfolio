@@ -540,7 +540,15 @@
 
 /* ── contact ───────────────────────────────────────────────────────────── */
 
+/* The one target on this page that has to be easy to hit: it measured 612x27,
+   and it is the primary way anyone contacts him. inline-flex + min-height gives
+   it 44px without changing the type. The two links in .pm-facts below are left
+   at their line height on purpose — they sit inside a definition list beside
+   running text, which is the case WCAG 2.2 exempts from the target-size rule. */
 .pm-mailto {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--pm-disp);
   font-size: var(--pm-t-label);
   line-height: 1.7;
@@ -765,8 +773,16 @@
 }
 
 /* The name plate is a link home inside a room, and must not look like body
-   copy that happens to be blue — it keeps the plate's own gold. */
+   copy that happens to be blue — it keeps the plate's own gold.
+
+   min-height, because it measured 704x32 on every page: it is a standalone
+   navigation target, not a link inside a sentence, so the 44px rule applies to
+   it with no exception to hide behind. inline-flex is what lets a min-height
+   apply to an inline element at all. */
 .pm-name-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: inherit;
   text-decoration: none;
 }

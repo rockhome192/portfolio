@@ -74,14 +74,20 @@ export function PixelProject({ p, others }: { p: ProjectPage; others: ProjectPag
         ) : null}
 
         {p.highlights.length > 0 && (
+          <>
+            <h2 className="pm-sr-only">What it does</h2>
           <ul className="pm-highlights">
             {p.highlights.map((h) => (
               <li key={h}>{h}</li>
             ))}
           </ul>
+          </>
         )}
 
-        <ul className="pm-chips" aria-label="Stack">
+        <h2 id="project-stack" className="pm-sr-only">
+          Stack
+        </h2>
+        <ul className="pm-chips" aria-labelledby="project-stack">
           {p.stack.map((s) => (
             <li key={s} className="pm-chip" style={{ borderColor: accent }}>
               {s}
@@ -90,6 +96,8 @@ export function PixelProject({ p, others }: { p: ProjectPage; others: ProjectPag
         </ul>
 
         {p.links.length > 0 && (
+          <>
+            <h2 className="pm-sr-only">Links</h2>
           <div className="pm-linkrow">
             {p.links.map((l, i) => (
               <a
@@ -103,6 +111,7 @@ export function PixelProject({ p, others }: { p: ProjectPage; others: ProjectPag
               </a>
             ))}
           </div>
+          </>
         )}
       </article>
 

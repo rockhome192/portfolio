@@ -41,6 +41,7 @@ export function PixelContact() {
     >
       <div className="pm-two-col">
         <div className="pm-prose">
+          <h2 className="pm-sr-only">How to reach me</h2>
           <a href={`mailto:${contact.email}`} className="pm-mailto">
             {contact.email}
           </a>
@@ -76,6 +77,7 @@ export function PixelContact() {
           </div>
         ) : (
           <form onSubmit={onSubmit} noValidate className="pm-form">
+            <h2 className="pm-sr-only">Send a message</h2>
             {/* Honeypot — hidden from humans, tempting to bots. */}
             <div aria-hidden="true" className="pm-honeypot">
               <label htmlFor="pm-website">Website (leave blank)</label>
