@@ -12,7 +12,7 @@ import { ROOMS, type PanelId } from "./map-data";
  * It is one row of plain text links because that is the fast way in, and the
  * fast way in is the one a recruiter with four tabs open will take.
  */
-export function PixelRoomNav({ current }: { current: PanelId }) {
+export function PixelRoomNav({ current }: { current: PanelId | null }) {
   return (
     <nav className="pm-roomnav" aria-label="Rooms">
       <Link href="/" className="pm-roomnav-link pm-roomnav-home">

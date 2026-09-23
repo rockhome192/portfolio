@@ -158,8 +158,9 @@
 
 .pm-section-lede {
   margin: 0;
-  font-size: var(--pm-t-body);
-  line-height: var(--pm-lh);
+  font-family: var(--pm-prose);
+  font-size: var(--pm-t-lede);
+  line-height: var(--pm-lh-prose);
   color: var(--pm-dim);
   max-width: 65ch;
 }

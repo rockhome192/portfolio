@@ -22,7 +22,8 @@ export function PixelRoom({
   current,
   children,
 }: {
-  current: PanelId;
+  /** `null` for a page that is in no room — see app/not-found.tsx. */
+  current: PanelId | null;
   children: ReactNode;
 }) {
   return (

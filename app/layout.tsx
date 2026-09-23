@@ -10,11 +10,27 @@ import "./pixel-tokens.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
+/*
+  The pre-pixel site's two faces. Measured 2026-09-22 in a real browser: across
+  all seven pages they paint ZERO characters — every `.pm-*` rule overrides the
+  `--font-sans` that body still sets, and the only files that ask for
+  `--font-mono` are the old components, which nothing imports. They were still
+  being preloaded on every page: 22.3 KB for Space Grotesk and 31.3 KB for
+  JetBrains Mono, 82% of the font bytes on the wire, for nothing rendered.
+
+  `preload: false` is the fix rather than deleting them, because the decision of
+  2026-09-17 was that the old design stays revertable by editing app/page.tsx
+  alone. The @font-face rules are still here and the variables still resolve, so
+  a revert needs no change in this file; the browser simply never fetches a face
+  no glyph asks for. If the old components are ever deleted for good, delete
+  these two blocks and their imports with them.
+*/
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-space-grotesk",
   display: "swap",
+  preload: false,
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -22,6 +38,7 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500", "600", "700"],
   variable: "--font-jetbrains-mono",
   display: "swap",
+  preload: false,
 });
 
 // The overworld's two faces. Press Start 2P for anything that reads as a

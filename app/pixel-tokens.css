@@ -55,6 +55,11 @@
   --pm-prose: system-ui, -apple-system, "Segoe UI", sans-serif;
   --pm-t-prose: 17px;
   --pm-lh-prose: 1.75;
+  /* A room's opening line, one step above the prose under it. It used to be
+     24px VT323, which put two typefaces in the same block of reading — measured
+     2026-09-22 on /dev-log, /contact and /work/donatr. Same family as the prose
+     now; the size is what marks it as the opening line. */
+  --pm-t-lede: 19px;
 
   /* Sign and badge type on the board. Separate from the scale above because
      they are sized against the board's width, not the page's. */
